@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>魔道祖師職業聯賽討論版 · 電競嘴砲現場</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0c10;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 20px;
+            color: #e2e8f0;
+        }
+
+        .app-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #15171c;
+            border-radius: 28px;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.6);
+            overflow: hidden;
+            border: 1px solid #2a2d35;
+        }
+
+        .forum-header {
+            background: #1c1e24;
+            border-bottom: 1px solid #2a2d35;
+            padding: 18px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .site-title h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f97316, #e11d48);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .site-title p {
+            font-size: 0.65rem;
+            color: #8a8d99;
+            margin-top: 4px;
+        }
+
+        .user-profile {
+            background: #22252c;
+            padding: 5px 14px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            border: 1px solid #3a3e48;
+        }
+
+        .user-profile label {
+            font-size: 0.65rem;
+            color: #b9bcc6;
+        }
+
+        .user-profile input {
+            background: #0c0e12;
+            border: 1px solid #3a3e48;
+            border-radius: 40px;
+            padding: 4px 10px;
+            font-size: 0.7rem;
+            width: 100px;
+            color: #f1f3f7;
+        }
+
+        .board-nav {
+            background: #181b22;
+            padding: 8px 20px;
+            border-bottom: 1px solid #2a2d35;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .board-btn {
+            background: none;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 8px 8px;
+            cursor: pointer;
+            color: #9ca3af;
+            transition: 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .board-btn.active {
+            color: #f97316;
+            border-bottom-color: #f97316;
+        }
+
+        .new-post-btn {
+            margin-left: auto;
+            background: #f97316;
+            border: none;
+            color: #0f0f12;
+            padding: 5px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .refresh-btn {
+            background: #2c303a;
+            border: none;
+            color: #e2e8f0;
+            padding: 5px 12px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.7rem;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+
+        .main-view {
+            padding: 24px;
+            min-height: 550px;
+        }
+
+        .post-card {
+            background: #1e2128;
+            border: 1px solid #2a2d35;
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 18px;
+            transition: 0.1s;
+        }
+
+        .post-card:hover {
+            border-color: #f97316;
+            background: #23262e;
+        }
+
+        .post-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #facc15;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .post-meta {
+            display: flex;
+            gap: 18px;
+            font-size: 0.65rem;
+            color: #8e929e;
+            margin: 8px 0 12px 0;
+            flex-wrap: wrap;
+        }
+
+        .post-excerpt {
+            color: #c9cdd6;
+            margin: 10px 0;
+            line-height: 1.45;
+            font-size: 0.85rem;
+        }
+
+        .reply-count {
+            font-size: 0.65rem;
+            background: #2c303a;
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 30px;
+            color: #facc15;
+            cursor: pointer;
+        }
+
+        .detail-header {
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .back-btn {
+            background: #2c303a;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 30px;
+            color: #e2e8f0;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .original-post {
+            background: #1b1e26;
+            border-left: 4px solid #f97316;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 28px;
+        }
+
+        .reply-item {
+            background: #161920;
+            border-bottom: 1px solid #2a2d35;
+            padding: 16px 0 16px 12px;
+            margin-left: 6px;
+        }
+
+        .quote-block {
+            background: #0d0f14;
+            border-left: 3px solid #facc15;
+            padding: 10px 14px;
+            margin: 10px 0;
+            border-radius: 14px;
+            font-size: 0.75rem;
+            color: #b9c3d4;
+        }
+
+        .quote-author {
+            font-weight: 700;
+            color: #facc15;
+            margin-bottom: 4px;
+        }
+
+        .quote-btn {
+            background: none;
+            border: none;
+            color: #f97316;
+            font-size: 0.65rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .reply-area {
+            margin-top: 28px;
+            background: #1e2128;
+            padding: 20px;
+            border-radius: 24px;
+        }
+
+        textarea {
+            width: 100%;
+            background: #0c0e12;
+            border: 1px solid #3a3e48;
+            border-radius: 18px;
+            padding: 12px;
+            color: white;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .submit-reply {
+            background: #f97316;
+            border: none;
+            color: #0f0f12;
+            font-weight: 700;
+            padding: 8px 22px;
+            border-radius: 40px;
+            margin-top: 12px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+            color: #facc15;
+            font-size: 0.8rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 14px;
+            background: #0c0e12;
+            border: 1px solid #3a3e48;
+            color: white;
+        }
+
+        .cancel-quote {
+            margin-left: 12px;
+            background: #3a3e48;
+            border: none;
+            padding: 3px 12px;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            cursor: pointer;
+        }
+
+        .empty-msg {
+            text-align: center;
+            padding: 48px;
+            color: #7e8290;
+        }
+
+        .replying-info {
+            background: #2c303a;
+            border-radius: 30px;
+            padding: 6px 14px;
+            margin-bottom: 12px;
+            display: inline-block;
+            font-size: 0.7rem;
+            color: #f97316;
+        }
+
+        .post-content {
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+    </style>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="app-container">
+        <div class="forum-header">
+            <div class="site-title">
+                <h1>⚔️ 魔道祖師職業聯賽討論版</h1>
+                <p>不夜天王朝粉｜蓮花塢亞軍蒐集者｜道友CP｜BP檢討｜血流成河</p>
+            </div>
+            <div class="user-profile">
+                <span>🎮 電競嘴砲身份</span>
+                <label>暱稱</label>
+                <input type="text" v-model="currentUser.name" placeholder="例: 溫晁今天送了沒">
+                <label>ID</label>
+                <input type="text" v-model="currentUser.id" placeholder="tag">
+            </div>
+        </div>
+
+        <div class="board-nav">
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button v-for="board in boards" :key="board.id" 
+                    class="board-btn" :class="{ active: currentBoardId === board.id }"
+                    @click="switchBoard(board.id)">
+                    {{ board.name }}
+                </button>
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <button class="refresh-btn" @click="refreshPostList">🔄 刷新貼文</button>
+                <button class="new-post-btn" @click="openCreatePostView">✍️ 發新帖開戰</button>
+            </div>
+        </div>
+
+        <div class="main-view">
+            <!-- 帖子列表頁 -->
+            <div v-if="currentView === 'postList'">
+                <div class="list-header">
+                    <div style="font-size:0.75rem; color:#8e929e;">📌 當前板塊：{{ getBoardName(currentBoardId) }}</div>
+                    <div style="font-size:0.7rem; color:#8e929e;">⚡ 共 {{ filteredPosts.length }} 篇貼文</div>
+                </div>
+                <div v-if="filteredPosts.length === 0" class="empty-msg">
+                    🔥 沒人開噴？不可能，蓮花塢粉快出來崩潰！
+                </div>
+                <div v-for="post in filteredPosts" :key="post.id" class="post-card">
+                    <div class="post-title" @click="openPostDetail(post.id)">{{ post.title }}</div>
+                    <div class="post-meta">
+                        <span>✍️ {{ post.authorName }} ({{ post.authorId }})</span>
+                        <span>🕘 {{ post.createdAt }}</span>
+                        <span>💬 {{ post.replies.length }} 條回覆</span>
+                    </div>
+                    <div class="post-excerpt">{{ post.excerpt || post.content.slice(0, 130) + '…' }}</div>
+                    <div class="reply-count" @click="openPostDetail(post.id)">🗣️ 加入戰場 →</div>
+                </div>
+            </div>
+
+            <!-- 發新帖 -->
+            <div v-if="currentView === 'createPost'">
+                <div class="detail-header">
+                    <button class="back-btn" @click="backToList">← 返回討論版</button>
+                    <h3 style="margin:0; color:#facc15;">✍️ 發佈新帖</h3>
+                </div>
+                <div style="background:#1e2128; padding:24px; border-radius:28px;">
+                    <div class="form-group">
+                        <label>📂 討論分類</label>
+                        <select v-model="newPostForm.boardId">
+                            <option v-for="b in boards" :value="b.id">{{ b.name }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>⚡ 標題</label>
+                        <input v-model="newPostForm.title" placeholder="例: 溫晁到底是不是不夜天破口？BP在搞？">
+                    </div>
+                    <div class="form-group">
+                        <label>💢 內文</label>
+                        <textarea rows="5" v-model="newPostForm.content" placeholder="地圖炮開起來..."></textarea>
+                    </div>
+                    <button class="submit-reply" @click="submitNewPost" style="background:#f97316;">🚀 發布引戰</button>
+                </div>
+            </div>
+
+            <!-- 帖子詳情 + 回覆區 -->
+            <div v-if="currentView === 'postDetail' && selectedPost">
+                <div class="detail-header">
+                    <button class="back-btn" @click="backToList">← 返回列表</button>
+                    <button class="back-btn" style="background:#2c303a;" @click="refreshDetail">🔄 刷新血流</button>
+                </div>
+                <div class="original-post">
+                    <div style="font-size:1.25rem; font-weight:800; margin-bottom:12px; color:#facc15;">{{ selectedPost.title }}</div>
+                    <div class="post-meta" style="margin-bottom: 12px;">
+                        <span>🧨 {{ selectedPost.authorName }} ({{ selectedPost.authorId }})</span>
+                        <span>📅 {{ selectedPost.createdAt }}</span>
+                    </div>
+                    <div class="post-content" style="white-space: pre-wrap; line-height: 1.5;">{{ selectedPost.content }}</div>
+                    <div style="margin-top: 16px;">
+                        <button class="quote-btn" @click="setQuoteForReply(null, selectedPost.authorName, selectedPost.content, 'post')">
+                            💬 引用主帖
+                        </button>
+                    </div>
+                </div>
+
+                <div style="margin: 20px 0 10px 0; font-weight:700; color:#facc15;">🗣️ 戰場回音 · {{ selectedPost.replies.length }} 條回覆</div>
+                <div v-if="selectedPost.replies.length === 0" class="empty-msg" style="padding:20px">沒人敢回？這串要涼</div>
+                <div v-for="reply in selectedPost.replies" :key="reply.id" class="reply-item">
+                    <div class="reply-meta" style="display:flex; gap:12px; font-size:0.7rem; margin-bottom:6px;">
+                        <span>🔥 {{ reply.authorName }} ({{ reply.authorId }})</span>
+                        <span>⏱️ {{ reply.createdAt }}</span>
+                    </div>
+                    <div v-if="reply.quote" class="quote-block">
+                        <div class="quote-author">🔗 引用了 @{{ reply.quote.fromAuthor }} 的暴言 :</div>
+                        <div>「 {{ reply.quote.fromContent.length > 100 ? reply.quote.fromContent.slice(0,100)+'…' : reply.quote.fromContent }} 」</div>
+                    </div>
+                    <div class="reply-content" style="margin:8px 0;">{{ reply.content }}</div>
+                    <div class="reply-actions">
+                        <button class="quote-btn" @click="setQuoteForReply(reply.id, reply.authorName, reply.content, 'reply')">
+                            🔁 引用回嗆
+                        </button>
+                    </div>
+                </div>
+
+                <div class="reply-area">
+                    <div v-if="quoteTarget.active" class="replying-info">
+                        🎯 正在引用: {{ quoteTarget.fromAuthor }} 的發言
+                        <button class="cancel-quote" @click="clearQuote">清除引用</button>
+                    </div>
+                    <textarea rows="3" v-model="replyContent" placeholder="嘴回去或護航 記得帶梗..."></textarea>
+                    <div style="display: flex; justify-content: flex-end;">
+                        <button class="submit-reply" @click="submitReply">✍️ 發送回嘴</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const { createApp, ref, computed } = Vue;
+
+    createApp({
+        setup() {
+            // 版塊：現實電競討論分類
+            const boards = ref([
+                { id: 1, name: "🏆 賽事討論" },
+                { id: 2, name: "⚰️ 選手上香" },
+                { id: 3, name: "📊 BP檢討" },
+                { id: 4, name: "💪 戰隊安利" },
+                { id: 5, name: "💥 黑特/崩潰區" },
+                { id: 6, name: "❤️‍🔥 CP亂鬥區" },
+                { id: 7, name: "🎬 實況/花絮" }
+            ]);
+            const currentBoardId = ref(1);
+            const currentUser = ref({ name: "溫晁今天送了沒", id: "送頭王者" });
+
+            const generateId = () => Date.now() + '-' + Math.random().toString(36).substring(2, 8);
+            const getNowTime = () => {
+                const d = new Date();
+                return `${d.getMonth()+1}/${d.getDate()} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+            };
+
+            const getBoardName = (id) => {
+                const board = boards.value.find(b => b.id === id);
+                return board ? board.name : "未知";
+            };
+
+            // 完整貼文資料庫（依據參考內容整理）
+            const posts = ref([]);
+            const initMockData = () => {
+                const now = getNowTime();
+                posts.value = [
+                    // ==================== 賽事討論 ====================
+                    {
+                        id: "p1", boardId: 1,
+                        title: "【討論】今天打蓮花塢3:2 有人可以解釋一下為什麼要打滿五場嗎",
+                        content: "如題。不是說好3:0車過去？我晚餐都買好了準備看虐菜，結果看到心臟痛。溫晁第四場那個送頭我看十遍還是看不懂，他是被對面收買是不是。",
+                        authorName: "溫晁今天送了沒", authorId: "送頭王者", createdAt: now,
+                        excerpt: "不是說好3:0車過去？溫晁第四場那個送頭我看十遍還是看不懂",
+                        replies: [
+                            { id: "r1", authorName: "護晁大隊站出來", authorId: "chao_fan", createdAt: now, quote: null, content: "你要不要先看看溫逐流那場的視野再來嘴？沒視野你要溫晁怎麼退？他就射手欸。" },
+                            { id: "r2", authorName: "護晁大隊站出來", authorId: "chao_fan2", createdAt: now, quote: null, content: "然後溫晁第五場閃現定師姐的時候你們怎麼不說話了？道歉名單在哪？" },
+                            { id: "r3", authorName: "溫晁今天送了沒", authorId: "送頭王者", createdAt: now, quote: { fromAuthor: "護晁大隊站出來", fromContent: "然後溫晁第五場閃現定師姐的時候你們怎麼不說話了？", type: "reply", sourceId: "r2" }, content: "道歉名單？他送十場秀一場就要我道歉？而且第五場能贏是溫若寒carry好嗎，關溫晁屁事。" },
+                            { id: "r4", authorName: "溫皇唯一", authorId: "wen_king", createdAt: now, quote: null, content: "你們不要吵了，溫若寒第五場那個三殺看了沒？一個人收三個對面直接解散。這就是世一C，蓮花塢乖乖去拿亞軍。" },
+                            { id: "r5", authorName: "炎陽老粉", authorId: "old_fire", createdAt: now, quote: null, content: "說真的溫寧第三場那個軟手沒人檢討？他站在那邊不敢打，讓溫若寒一打三，我差點中風。他到底什麼時候才不會軟手。" },
+                            { id: "r6", authorName: "溫寧乖孫", authorId: "ning_fan", createdAt: now, quote: null, content: "寧寧會怕啦。季後賽他就不會軟手了（大概）" },
+                            { id: "r7", authorName: "不夜天分析師", authorId: "analyst", createdAt: now, quote: null, content: "你們都不看數據的嗎。不夜天這季對蓮花塢的勝率是80%，五場贏四場，最爛的那場也打到第五局。這叫統治力好嗎。而且溫晁的參團率全隊第二，他參與會戰當然容易死，啊他就開戰射手啊。" },
+                            { id: "r8", authorName: "只想看比賽", authorId: "just_watch", createdAt: now, quote: null, content: "反正贏了。下一場打金鱗臺，可以3:0了吧？金家那麼爛。" }
+                        ]
+                    },
+                    {
+                        id: "p2", boardId: 1,
+                        title: "【黑特】又輸了 我已經不知道要說什麼",
+                        content: "第五場師姐被溫晁定到的時候我就關螢幕了。不想看。為什麼每次都是這樣。為什麼。",
+                        authorName: "下次一定", authorId: "next_time", createdAt: now,
+                        excerpt: "第五場師姐被溫晁定到的時候我就關螢幕了。為什麼每次都是這樣。",
+                        replies: [
+                            { id: "r1", authorName: "師姐的小青霜", authorId: "qing霜姐", createdAt: now, quote: null, content: "師姐第五場被針對啊。對面四個人在盯她，你要她怎麼打。" },
+                            { id: "r2", authorName: "下次一定", authorId: "next_time", createdAt: now, quote: { fromAuthor: "師姐的小青霜", fromContent: "師姐第五場被針對啊", type: "reply", sourceId: "r1" }, content: "那前四場怎麼就沒被針對？" },
+                            { id: "r3", authorName: "江爸出來挨罵", authorId: "blame_jiang", createdAt: now, quote: null, content: "BP問題啦。第五場不ban鎖鏈不就沒事了？江楓眠到底在想什麼。" },
+                            { id: "r4", authorName: "雲夢三姊弟", authorId: "yunmeng_sib", createdAt: now, quote: null, content: "不管怎樣，師姐、阿澄、魏嬰都辛苦了。蓮花塢加油。" }
+                        ]
+                    },
+                    // ==================== 選手上香 ====================
+                    {
+                        id: "p3", boardId: 2,
+                        title: "【選手上香】魏無羨的狀態是不是下滑了",
+                        content: "最近幾場魏無羨的表現很不穩 繞後時機怪怪的 有時候還會莫名送頭 是發生什麼事了嗎",
+                        authorName: "認真好擔心", authorId: "worried_fan", createdAt: now,
+                        excerpt: "最近幾場魏無羨的表現很不穩 繞後時機怪怪的",
+                        replies: [
+                            { id: "wx1", authorName: "雙傑粉", authorId: "twin_hero", createdAt: now, quote: null, content: "下滑三小 他上一場那個繞後開三個你沒看到？選擇性失明？" },
+                            { id: "wx2", authorName: "專業分析台", authorId: "analyst", createdAt: now, quote: null, content: "數據說話 魏無羨本季的死亡率比上季上升15% 但參團率也上升8% 打法變得更激進了 算是雙面刃" },
+                            { id: "wx3", authorName: "黑粉頭子", authorId: "hater", createdAt: now, quote: null, content: "魏無羨本來就過譽 靠師姐carry而已 去別隊就是二流打野" },
+                            { id: "wx4", authorName: "雙傑粉", authorId: "twin_hero", createdAt: now, quote: { fromAuthor: "黑粉頭子", fromContent: "魏無羨本來就過譽", type: "reply", sourceId: "wx3" }, content: "笑死 雲玩家又來了 你去看看他S2在二隊的數據再來說嘴 那時候沒有師姐他還是MVP" }
+                        ]
+                    },
+                    {
+                        id: "p4", boardId: 2,
+                        title: "【選手上香】江澄是不是被低估了",
+                        content: "每次都在說師姐多carry 魏無羨多秀 啊江澄的鎖鏈跟開戰時機明明就很鬼 為什麼都沒人討論他",
+                        authorName: "認真討論", authorId: "serious", createdAt: now,
+                        excerpt: "江澄的鎖鏈跟開戰時機明明就很鬼 為什麼都沒人討論他",
+                        replies: [
+                            { id: "jc1", authorName: "江澄毒唯", authorId: "cheng_fan", createdAt: now, quote: null, content: "終於有人說了 阿澄的鎖鏈命中率全聯賽第一 結果每次都在檢討他輸出低 啊他就輔助是要多高輸出" },
+                            { id: "jc2", authorName: "藍粉亂入", authorId: "blue_fan", createdAt: now, quote: null, content: "藍曦臣的奶量才是全聯賽第一好嗎 輔助不是只有開戰" },
+                            { id: "jc3", authorName: "道友派", authorId: "daoyou", createdAt: now, quote: null, content: "魏無羨+江澄的連動才是蓮花塚的靈魂 師姐只是負責收頭而已" }
+                        ]
+                    },
+                    {
+                        id: "p5", boardId: 2,
+                        title: "【崩潰】溫若寒的手是不是又受傷了",
+                        content: "第五局打完溫若寒下台的時候一直在甩右手。畫面有拍到。之前S2季後賽前他也這樣，然後那個系列賽他打得很掙扎。有人有卦嗎？",
+                        authorName: "炎陽觀察家", authorId: "sun_watcher", createdAt: now,
+                        excerpt: "第五局打完溫若寒下台的時候一直在甩右手。畫面有拍到。",
+                        replies: [
+                            { id: "wh1", authorName: "溫皇信徒", authorId: "wen_king", createdAt: now, quote: null, content: "不要烏鴉嘴。他只是手癢。" },
+                            { id: "wh2", authorName: "不夜天醫療組（自稱）", authorId: "fake_pt", createdAt: now, quote: null, content: "我是復健科的啦，從畫面看他甩手的角度和頻率，像是肌腱炎或腕隧道症候群。但只是猜測，不要當真。" },
+                            { id: "wh3", authorName: "不夜天分析師", authorId: "analyst", createdAt: now, quote: null, content: "數據來說，溫若寒這季的APM比上季下降5%，但這也可能是因為版本。不一定跟手傷有關。" }
+                        ]
+                    },
+                    // ==================== BP檢討 ====================
+                    {
+                        id: "p6", boardId: 3,
+                        title: "【BP檢討】蓮花塚教練是不是在搞",
+                        content: "第二場那個BP是怎樣 師姐拿青霜仙子 結果給他配一套沒前排的陣容 是嫌她心魔不夠快是不是",
+                        authorName: "BP看傻了", authorId: "bp_watcher", createdAt: now,
+                        excerpt: "第二場那個BP是怎樣 師姐拿青霜仙子 結果給他配一套沒前排的陣容",
+                        replies: [
+                            { id: "bp1", authorName: "蓮花事業粉", authorId: "lotus_biz", createdAt: now, quote: null, content: "江教練（江楓眠）的BP本來就很迷 上禮拜也是 拿一個沒開戰的陣容 整場被動" },
+                            { id: "bp2", authorName: "老蓮花粉", authorId: "old_lotus", createdAt: now, quote: { fromAuthor: "蓮花事業粉", fromContent: "江教練（江楓眠）的BP本來就很迷", type: "reply", sourceId: "bp1" }, content: "江爸BP沒問題好嗎 是選手執行有問題 第二場那個陣容打拉扯的 結果阿澄一直想開戰" },
+                            { id: "bp3", authorName: "教練殺手", authorId: "coach_killer", createdAt: now, quote: null, content: "江楓眠該退休了 BP永遠被對面猜透 蓮花塚的BP是聯賽最好預測的 沒有之一" }
+                        ]
+                    },
+                    {
+                        id: "p7", boardId: 3,
+                        title: "【認真】江楓眠是不是該退休了 我是說真的",
+                        content: "我不是來吵架的。我是認真覺得江爸該把教練交出來了。他的BP已經被看破手腳，關鍵比賽永遠被針對。虞媽的戰術理解其實很好，為什麼不讓她試試看？",
+                        authorName: "蓮花事業粉", authorId: "lotus_biz", createdAt: now,
+                        excerpt: "我是認真覺得江爸該把教練交出來了。他的BP已經被看破手腳",
+                        replies: [
+                            { id: "jm1", authorName: "江爸出來挨罵", authorId: "blame_jiang", createdAt: now, quote: null, content: "我同意。蓮花塢需要新的BP思維。江爸可以當選手，但BP換人做。" },
+                            { id: "jm2", authorName: "老蓮花粉", authorId: "old_lotus", createdAt: now, quote: null, content: "沒有江楓眠的BP，蓮花塢S1連決賽都進不去。你們這些新粉都不知道他做過多少事。" },
+                            { id: "jm3", authorName: "雲夢三姊弟", authorId: "yunmeng_sib", createdAt: now, quote: null, content: "不管誰BP，我們都支持。但希望可以有改變。一直輸不夜天真的很痛苦。" }
+                        ]
+                    },
+                    {
+                        id: "p8", boardId: 3,
+                        title: "【認真】藍啟仁什麼時候才要退休",
+                        content: "數據會說話。藍啟仁這季的對線經濟差是聯賽倒數第五。他的輸出佔比只有12%。思追在二隊等兩年了，為什麼不讓他上來？",
+                        authorName: "思追該上場了", authorId: "sizhui_fan", createdAt: now,
+                        excerpt: "數據會說話。藍啟仁這季的對線經濟差是聯賽倒數第五。",
+                        replies: [
+                            { id: "lqr1", authorName: "藍大教會", authorId: "lan_big", createdAt: now, quote: null, content: "藍啟仁的價值不在輸出，在他的經驗跟視野控制。你們都不看地圖的嗎。" },
+                            { id: "lqr2", authorName: "雲深老居民", authorId: "cloud_res", createdAt: now, quote: null, content: "這個議題吵兩年了。藍啟仁自己不想退，藍家也不會逼他。" },
+                            { id: "lqr3", authorName: "沉默多數", authorId: "silent", createdAt: now, quote: null, content: "聽說藍啟仁的合約到S5。到時候應該會退。" }
+                        ]
+                    },
+                    // ==================== 戰隊安利 ====================
+                    {
+                        id: "p9", boardId: 4,
+                        title: "【閒聊】今天贏蓮花塢 誰再說我們是雜牌軍",
+                        content: "3:2贏了。第五場聶明玦單殺師姐兩次。誰再說我們是雜牌軍。我們是專打強隊的瘋狗。",
+                        authorName: "赤鋒永不退", authorId: "chifeng", createdAt: now,
+                        excerpt: "3:2贏了。第五場聶明玦單殺師姐兩次。誰再說我們是雜牌軍。",
+                        replies: [
+                            { id: "nm1", authorName: "大哥的女人", authorId: "mingjue_wife", createdAt: now, quote: null, content: "大哥今天那個單殺師姐的操作我要剪下來當鈴聲。誰敢再說他只會送。" },
+                            { id: "nm2", authorName: "星辰子琛", authorId: "star_chen", createdAt: now, quote: null, content: "曉星塵跟宋嵐第二場那個雙人combo也很鬼好嗎。直接秒師姐，藍大來都奶不回來。雙道長才是今天的MVP。" },
+                            { id: "nm3", authorName: "薛洋黑", authorId: "hate_xy", createdAt: now, quote: null, content: "薛洋第三場那個送頭直接讓不淨世掉兩條龍。他到底什麼時候才不會搞。" },
+                            { id: "nm4", authorName: "糖果愛好者", authorId: "candy_fan", createdAt: now, quote: null, content: "薛洋第三場送頭，但第四場他carry了啊。沒有他第四場那個偷龍，早就3:1結束了。" }
+                        ]
+                    },
+                    // ==================== 黑特/崩潰區 ====================
+                    {
+                        id: "p10", boardId: 5,
+                        title: "【黑特】又輸了 金光善你到底什麼時候才要退休",
+                        content: "3:1輸雲深。金光善第四場那個走位直接被藍忘機單殺，輸出全隊最低，KDA 0.2。他到底為什麼還在場上。他是老闆就可以這樣雷嗎。",
+                        authorName: "金光善退休了沒", authorId: "retire_js", createdAt: now,
+                        excerpt: "3:1輸雲深。金光善第四場那個走位直接被藍忘機單殺",
+                        replies: [
+                            { id: "js1", authorName: "金家守護者", authorId: "gold_guard", createdAt: now, quote: null, content: "金光善這季的表現真的很糟。但他是老闆，我們能怎樣。" },
+                            { id: "js2", authorName: "瑤妹的小斗篷", authorId: "yao_fan", createdAt: now, quote: null, content: "瑤妹第二場那個偷龍加三殺，結果隊友送光。我直接摔手機。瑤妹來金家真的是浪費。" },
+                            { id: "js3", authorName: "金子軒女友粉", authorId: "zixuan_gf", createdAt: now, quote: null, content: "子軒這場輸出全隊最高，四場都是。他已經盡力了。他需要更好的隊友。" }
+                        ]
+                    },
+                    {
+                        id: "p11", boardId: 5,
+                        title: "【黑特區】聶明玦到底什麼時候才會不送",
+                        content: "每一場都在送 每一場都在上演「我一個人可以打五個」然後被對面圍毆致死 你到底什麼時候才會學會撤退",
+                        authorName: "我真的受不了", authorId: "fed_up", createdAt: now,
+                        excerpt: "每一場都在送 每一場都在上演「我一個人可以打五個」",
+                        replies: [
+                            { id: "nm1", authorName: "聶家少數粉", authorId: "nie_fan", createdAt: now, quote: null, content: "他打法就這樣啊 你不喜歡不要看" },
+                            { id: "nm2", authorName: "赤鋒信徒", authorId: "chifeng", createdAt: now, quote: null, content: "聶明玦就是那種 成也他敗也他 沒有他的莽夫打法 聶家連B級都排不上" },
+                            { id: "nm3", authorName: "專業酸民", authorId: "suan_min", createdAt: now, quote: null, content: "聶明玦就無腦 只會往前 這種選手也能當隊長 不淨世真的可憐" }
+                        ]
+                    },
+                    {
+                        id: "p12", boardId: 5,
+                        title: "【抱怨】藍景儀可不可以不要再在世界頻道嘴砲了",
+                        content: "每次都在世界頻道跟對手吵架，然後被針對，然後送頭。第三場他嘲諷金子軒「你們金家只會花錢」，結果被金子軒單殺兩次。丟不丟臉。",
+                        authorName: "雲深老居民", authorId: "cloud_res", createdAt: now,
+                        excerpt: "每次都在世界頻道跟對手吵架，然後被針對，然後送頭。",
+                        replies: [
+                            { id: "jy1", authorName: "景儀後援會", authorId: "jingyi_fan", createdAt: now, quote: null, content: "他是藍家唯一的綜藝擔當。沒有他，雲深不知處的比賽會很無聊。" },
+                            { id: "jy2", authorName: "沉默多數", authorId: "silent", createdAt: now, quote: null, content: "藍景儀比溫晁強多了好嗎。溫晁是純送，藍景儀至少會嘲諷。" },
+                            { id: "jy3", authorName: "藍家小兔", authorId: "blue_bunny", createdAt: now, quote: null, content: "其實景儀的嘲諷技能命中率滿高的。只是他太愛講話，容易被針對。" }
+                        ]
+                    },
+                    // ==================== CP亂鬥區 ====================
+                    {
+                        id: "p13", boardId: 6,
+                        title: "【CP粉亂鬥區】不要再刷金江了 噁心",
+                        content: "每場比賽聊天室都在刷「金江貼貼」「子軒看師姐」 煩不煩 他們就對手 是要貼三小",
+                        authorName: "尊重一下單身狗", authorId: "single_dog", createdAt: now,
+                        excerpt: "每場比賽聊天室都在刷「金江貼貼」 煩不煩",
+                        replies: [
+                            { id: "cp1", authorName: "金江結婚事務所", authorId: "jinjiang_cp", createdAt: now, quote: null, content: "人家互動就是有愛啊 你看賽後握手 子軒每次都多看師姐兩秒" },
+                            { id: "cp2", authorName: "道友派", authorId: "daoyou", createdAt: now, quote: null, content: "魏無羨x藍忘機才是王道好嗎 你們這些邪教CP閉嘴" },
+                            { id: "cp3", authorName: "樂子人", authorId: "funny_guy", createdAt: now, quote: null, content: "我反而想看師姐x藍忘機 雙C組 畫面太美我不敢看" }
+                        ]
+                    },
+                    // ==================== 實況/花絮 ====================
+                    {
+                        id: "p14", boardId: 7,
+                        title: "【實況精華】溫晁又在跟酸民吵架了 笑死",
+                        content: "昨天溫晁開實況，有人斗內問他「你什麼時候才不會送」，他直接唸出來然後說「你什麼時候才不會魯」。兩個人吵了五分鐘，溫晁還去查那個人的牌位，結果對方銅牌，溫晁說「銅牌教我打遊戲？」。我快笑死。",
+                        authorName: "晁晁可愛", authorId: "chao_cute", createdAt: now,
+                        excerpt: "昨天溫晁開實況，有人斗內問他「你什麼時候才不會送」",
+                        replies: [
+                            { id: "cc1", authorName: "護晁大隊站出來", authorId: "chao_fan", createdAt: now, quote: null, content: "我們晁晁就是真性情。那些酸民自己牌位低還敢嘴。" },
+                            { id: "cc2", authorName: "不夜天老人", authorId: "old_fire", createdAt: now, quote: null, content: "他的實況滿好笑的啦，比溫寧的實況有趣。溫寧開台都在沉默。" }
+                        ]
+                    },
+                    {
+                        id: "p15", boardId: 7,
+                        title: "【花絮】虞紫鳶實況罵觀眾 超好笑",
+                        content: "昨天虞媽開實況，有人問她「你覺得蓮花塢什麼時候會贏不夜天」，她直接回「等你學會打字的正確標點符號的時候」。超嗆。我快笑死。",
+                        authorName: "紫蛛兒", authorId: "zizhu", createdAt: now,
+                        excerpt: "昨天虞媽開實況，有人問她「你覺得蓮花塢什麼時候會贏不夜天」",
+                        replies: [
+                            { id: "yz1", authorName: "蓮花事業粉", authorId: "lotus_biz", createdAt: now, quote: null, content: "虞媽就是這種個性。上次訪問她也被問「蓮花塢是不是万年老二」，她說「万年老二也比万年老三好」。" },
+                            { id: "yz2", authorName: "雲夢三姊弟", authorId: "yunmeng_sib", createdAt: now, quote: null, content: "江爸後來有來串場，虞媽說「你來幹嘛，去練你的BP」，江爸說「我BP沒問題」，虞媽說「那就是你有問題」。夫妻日常超好笑。" }
+                        ]
+                    },
+                    {
+                        id: "p16", boardId: 7,
+                        title: "【神串留名】藍忘機在實況上說了一句完整的話 歷史性的一刻",
+                        content: "昨天藍忘機開實況，有人斗內問他「你最喜歡的角色是誰」，他沉默五秒說「含光君。因為他跟我很像。」然後就不說話了。總共13個字，史上最長句子。",
+                        authorName: "歷史見證人", authorId: "history", createdAt: now,
+                        excerpt: "昨天藍忘機開實況，有人斗內問他「你最喜歡的角色是誰」",
+                        replies: [
+                            { id: "lwj1", authorName: "含光我老公", authorId: "hanguang_wife", createdAt: now, quote: null, content: "「因為他跟我很像。」我要把這句話刻在墓碑上。" },
+                            { id: "lwj2", authorName: "沉默多數", authorId: "silent", createdAt: now, quote: null, content: "他開實況兩小時，總共說了22個字。但觀看數還是破十五萬。這就是藍忘機。" }
+                        ]
+                    },
+                    {
+                        id: "p17", boardId: 7,
+                        title: "【乳摸】金光瑤約到今年 他會走嗎",
+                        content: "金光瑤的合約今年到期。對岸論壇說蓮花塢和雲深都在接觸。他會續約還是會走？大家怎麼看。",
+                        authorName: "乳摸搬運工", authorId: "rumor", createdAt: now,
+                        excerpt: "金光瑤的合約今年到期。對岸論壇說蓮花塢和雲深都在接觸。",
+                        replies: [
+                            { id: "jgy1", authorName: "瑤妹的小斗篷", authorId: "yao_fan", createdAt: now, quote: null, content: "我希望他走。他值得更好的戰隊。他在金家被耽誤三年了。" },
+                            { id: "jgy2", authorName: "金家守護者", authorId: "gold_guard", createdAt: now, quote: null, content: "如果他走，金鱗臺的打野就廢了。青訓沒有人能補上。" }
+                        ]
+                    },
+                    {
+                        id: "p18", boardId: 7,
+                        title: "【討論】魏無羨今天那個繞後 我重播二十次",
+                        content: "第四場那個繞後，他從對面野區繞出來，一個人開三個，直接讓對面團滅。這個時機抓得也太鬼了吧。",
+                        authorName: "跑線機器粉絲", authorId: "roaming_fan", createdAt: now,
+                        excerpt: "第四場那個繞後，他從對面野區繞出來，一個人開三個",
+                        replies: [
+                            { id: "wwx1", authorName: "魏嬰我老公", authorId: "weiying_wife", createdAt: now, quote: null, content: "他繞後的時機真的全世界最強。沒有之一。" },
+                            { id: "wwx2", authorName: "江澄鎖鏈王", authorId: "cheng_chain", createdAt: now, quote: null, content: "阿澄第四場的鎖鏈也很鬼好嗎。鎖鏈命中率100%，結果都在討論魏嬰。鎖鏈都不用錢的喔。" }
+                        ]
+                    },
+                    {
+                        id: "p19", boardId: 7,
+                        title: "【討論】金子軒今天那個一打三 有夠鬼",
+                        content: "第四場雖然輸了，但子軒那個一打三的操作真的鬼。要不是隊友在睡，這場可以翻盤的。",
+                        authorName: "子軒C起來", authorId: "zixuan_fan", createdAt: now,
+                        excerpt: "第四場雖然輸了，但子軒那個一打三的操作真的鬼。",
+                        replies: [
+                            { id: "jzx1", authorName: "金子軒女友粉", authorId: "zixuan_gf", createdAt: now, quote: null, content: "子軒的操作完全沒問題。問題是其他人在幹嘛。他開戰的時候隊友在逛街。" },
+                            { id: "jzx2", authorName: "瑤妹的小斗篷", authorId: "yao_fan", createdAt: now, quote: null, content: "瑤妹第四場也沒打好啦。那個開戰時機太早了，隊友跟不上。雖然隊友也該跟。" }
+                        ]
+                    },
+                    {
+                        id: "p20", boardId: 7,
+                        title: "【求神】聶懷桑的粉絲在哪裡 出來認親",
+                        content: "我知道聶懷桑存在感很低。但他真的是很穩的輔助。他的視野控制其實是聯賽前段班。只是大家都不看地圖。有沒有懷桑粉出來認親一下。",
+                        authorName: "懷桑存在嗎", authorId: "huaisang_fan", createdAt: now,
+                        excerpt: "我知道聶懷桑存在感很低。但他真的是很穩的輔助。",
+                        replies: [
+                            { id: "nhs1", authorName: "路人甲", authorId: "passerby", createdAt: now, quote: null, content: "我在這裡不是懷桑粉。但我覺得你滿可憐的。幫你推一下。" },
+                            { id: "nhs2", authorName: "懷桑唯一粉絲", authorId: "huaisang_only", createdAt: now, quote: null, content: "...我在。我從S2開始支持他。他的視野控制真的很強，只是大家都不看地圖。" }
+                        ]
+                    }
+                ];
+            };
+            initMockData();
+
+            const currentView = ref('postList');
+            const selectedPostId = ref(null);
+            const selectedPost = ref(null);
+            const newPostForm = ref({ boardId: 1, title: '', content: '' });
+            const replyContent = ref('');
+            const quoteTarget = ref({ active: false, fromAuthor: '', fromContent: '', targetType: null, targetId: null });
+
+            const filteredPosts = computed(() => posts.value.filter(p => p.boardId === currentBoardId.value));
+
+            const refreshPostList = () => {
+                // 重新排序或重新加載（保持原有順序）
+                const currentPosts = [...posts.value];
+                posts.value = currentPosts;
+            };
+
+            const switchBoard = (id) => {
+                currentBoardId.value = id;
+                currentView.value = 'postList';
+                selectedPost.value = null;
+            };
+            const openPostDetail = (id) => {
+                const post = posts.value.find(p => p.id === id);
+                if(post) { selectedPost.value = JSON.parse(JSON.stringify(post)); currentView.value = 'postDetail'; }
+                replyContent.value = '';
+                quoteTarget.value = { active: false };
+            };
+            const refreshDetail = () => {
+                if(selectedPost.value) {
+                    const fresh = posts.value.find(p => p.id === selectedPost.value.id);
+                    if(fresh) selectedPost.value = JSON.parse(JSON.stringify(fresh));
+                }
+            };
+            const backToList = () => { currentView.value = 'postList'; selectedPost.value = null; };
+            const openCreatePostView = () => { newPostForm.value = { boardId: currentBoardId.value, title: '', content: '' }; currentView.value = 'createPost'; };
+            const submitNewPost = () => {
+                if(!newPostForm.value.title.trim() || !newPostForm.value.content.trim()) return alert("標題跟內文要噴啊");
+                const newPost = {
+                    id: generateId(),
+                    boardId: newPostForm.value.boardId,
+                    title: newPostForm.value.title,
+                    content: newPostForm.value.content,
+                    excerpt: newPostForm.value.content.slice(0,120),
+                    authorName: currentUser.value.name,
+                    authorId: currentUser.value.id,
+                    createdAt: getNowTime(),
+                    replies: []
+                };
+                posts.value.unshift(newPost);
+                currentBoardId.value = newPost.boardId;
+                currentView.value = 'postList';
+            };
+            const setQuoteForReply = (replyId, author, contentSnippet, type) => {
+                quoteTarget.value = { active: true, fromAuthor: author, fromContent: contentSnippet.slice(0,150), targetType: type, targetId: replyId };
+            };
+            const clearQuote = () => { quoteTarget.value = { active: false, fromAuthor: '', fromContent: '', targetType: null, targetId: null }; };
+            const submitReply = () => {
+                if(!selectedPost.value) return;
+                if(!replyContent.value.trim()) return alert("回嘴內容不能空");
+                const newReply = {
+                    id: generateId(),
+                    authorName: currentUser.value.name,
+                    authorId: currentUser.value.id,
+                    createdAt: getNowTime(),
+                    content: replyContent.value,
+                    quote: quoteTarget.value.active ? { fromAuthor: quoteTarget.value.fromAuthor, fromContent: quoteTarget.value.fromContent, type: quoteTarget.value.targetType, sourceId: quoteTarget.value.targetId } : null
+                };
+                const idx = posts.value.findIndex(p => p.id === selectedPost.value.id);
+                if(idx !== -1) posts.value[idx].replies.push(newReply);
+                if(selectedPost.value) selectedPost.value.replies.push(newReply);
+                replyContent.value = '';
+                clearQuote();
+                refreshDetail();
+            };
+
+            return {
+                boards, currentBoardId, currentUser, posts, filteredPosts, currentView, selectedPost,
+                newPostForm, replyContent, quoteTarget,
+                getBoardName,
+                refreshPostList,
+                switchBoard, openPostDetail, refreshDetail, backToList, openCreatePostView, submitNewPost,
+                setQuoteForReply, clearQuote, submitReply
+            };
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>
